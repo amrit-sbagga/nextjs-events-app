@@ -41,4 +41,4 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 
 This app is deployed on vercel here :
 
-https://nextjs-events-app-ruby.vercel.app/events
+https://nextjs-events-app-ruby.vercel.app

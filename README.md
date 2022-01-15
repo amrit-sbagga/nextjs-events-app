@@ -35,6 +35,9 @@ Open [http://localhost:3000](http://localhost:3000) in our browser to see the re
 
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
+
+## Environment Variables (.env file contents):
+REACT_APP_DB_URL=<PROD_DB_URL_HERE>
   
 
 ## Deployed on Vercel

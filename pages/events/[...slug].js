@@ -18,15 +18,15 @@ export default function FilteredEventsPage(props) {
 
   console.log("DB_API_URL = ", DB_API_URL);
   const { data, error } = useSWR(DB_API_URL);
-  if(error){
-    console.log("[slug] error = ", error);
-  }
+  // if(error){
+  //   console.log("[slug] error = ", error);
+  // }
 
-  if(data){
-    console.log("[slug] data = ", data);
-  }else{
-    console.log("no data received from server..");
-  }
+  // if(data){
+  //   console.log("[slug] data = ", data);
+  // }else{
+  //   console.log("no data received from server..");
+  // }
 
   useEffect(() => {
     if (data) {

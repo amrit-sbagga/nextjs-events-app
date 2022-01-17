@@ -18,7 +18,7 @@ export default function FilteredEventsPage(props) {
   console.log(filterData);
 
   console.log("DB_API_URL = ", DB_API_URL);
-  const { data, error } = useSWR(DB_API_URL);
+  const { data, error } = useSWR(DB_API_URL, fetcher);
   // if(error){
   //   console.log("[slug] error = ", error);
   // }
@@ -111,6 +111,15 @@ export default function FilteredEventsPage(props) {
     </Fragment>
   );
 }
+
+function fetcher(url) {
+  return fetch(url, {
+   headers: {
+   // Authorization: `Bearer ${localStorage.getItem('token')}`,
+    'Content-Type': 'application/json',
+   },
+  }).then(response => response.json());
+ }
 
 // these is replaced with client side data fetching
 // export async function getServerSideProps(context) {

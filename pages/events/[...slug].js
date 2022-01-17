@@ -42,12 +42,37 @@ export default function FilteredEventsPage(props) {
     }
   }, [data]);
 
+  let pageHeadData = (
+    <Head>
+      <title>Filtered Events</title>
+      <meta
+        name="description"
+        content={`A list of filtered events.`}
+      />
+    </Head>
+  );
+
   if (!loadedEvents) {
-    return <p className="center">Loading...</p>;
+    return (
+      <Fragment>
+        {pageHeadData}
+        <p className="center">Loading...</p>;
+      </Fragment>
+    );
   }
 
   const filteredYear = parseInt(filterData[0]);
   const filteredMonth = parseInt(filterData[1]);
+
+  pageHeadData = (
+    <Head>
+      <title>Filtered Events</title>
+      <meta
+        name="description"
+        content={`All events for ${filteredMonth}/${filteredYear}`}
+      />
+    </Head>
+  );
 
   if (
     isNaN(filteredYear) ||
@@ -60,6 +85,7 @@ export default function FilteredEventsPage(props) {
   ) {
     return (
       <Fragment>
+        {pageHeadData}
         <ErrorAlert>
           <p>Invalid filter. Please adjust your values!</p>
         </ErrorAlert>
@@ -83,6 +109,7 @@ export default function FilteredEventsPage(props) {
   if (!filteredEvents || filteredEvents.length === 0) {
     return (
       <Fragment>
+        {pageHeadData}
         <ErrorAlert>
           <p>No events found for the chosen filter!</p>
         </ErrorAlert>
@@ -99,13 +126,7 @@ export default function FilteredEventsPage(props) {
 
   return (
     <Fragment>
-      <Head>
-        <title>Filtered Events</title>
-        <meta
-          name="description"
-          content={`All events for ${filteredMonth}/${filteredYear}`}
-        />
-      </Head>
+      {pageHeadData}
       <ResultsTitle date={date} />
       <EventList items={filteredEvents} />
     </Fragment>
@@ -114,12 +135,12 @@ export default function FilteredEventsPage(props) {
 
 function fetcher(url) {
   return fetch(url, {
-   headers: {
-   // Authorization: `Bearer ${localStorage.getItem('token')}`,
-    'Content-Type': 'application/json',
-   },
-  }).then(response => response.json());
- }
+    headers: {
+      // Authorization: `Bearer ${localStorage.getItem('token')}`,
+      "Content-Type": "application/json",
+    },
+  }).then((response) => response.json());
+}
 
 // these is replaced with client side data fetching
 // export async function getServerSideProps(context) {

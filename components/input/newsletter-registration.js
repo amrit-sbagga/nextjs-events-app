@@ -12,6 +12,7 @@ function NewsletterRegistration() {
     // send valid data to API
 
     const enteredEmail = emailInputRef.current.value;
+    //console.log("enteredEmail = ", enteredEmail);
     fetch('/api/newsletter', {
       method : 'POST',
       body : JSON.stringify({ email : enteredEmail }),
@@ -20,6 +21,7 @@ function NewsletterRegistration() {
       }
     }).then(resp => resp.json())
     .then(data => console.log(data))
+    .catch(err => console.log(err.message));
   }
 
   return (

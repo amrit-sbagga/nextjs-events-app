@@ -1,5 +1,11 @@
-function handler(req, res) {
+import { MongoClient } from 'mongodb';
+
+async function handler(req, res) {
   const eventId = req.query.eventId;
+
+  const DB_URL = process.env.NEXT_PUBLIC_MONGO_DB_URL;
+  //console.log("DB_URL = ", DB_URL);
+  const client = await MongoClient.connect(DB_URL)
 
   if (req.method === "POST") {
     const { email, name, text } = req.body;
@@ -15,14 +21,21 @@ function handler(req, res) {
         return;
     }
 
-    console.log(email, name, text);
+    //console.log(email, name, text);
     const newComment = {
         id : new Date().toISOString,
         email,
         name,
-        text
+        text,
+        eventId
     }
     console.log(newComment);
+
+    const db = client.db();
+    const collection = db.collection('comments');
+    let result = await collection.insertOne({comment : newComment});
+    newComment.id = result.insertedId;
+
     res.status(201).json({message : 'Added comment.', comment : newComment})
   }
 
@@ -33,6 +46,8 @@ function handler(req, res) {
       ]
       res.status(200).json({ comments : dummyList });
   }
+
+  client.close();
 }
 
 export default handler;

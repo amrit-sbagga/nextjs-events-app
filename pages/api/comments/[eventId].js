@@ -42,7 +42,6 @@ async function handler(req, res) {
       res.status(201).json({message : 'Added comment.', comment : newComment})
     } catch (error) {
       res.status(500).json({message : 'Inserting data failed.'});
-      client.close();
     }
     
   }
@@ -53,10 +52,11 @@ async function handler(req, res) {
       let documents = await getAllDocuments(client, 'comments', sortData);
       res.status(200).json({ comments : documents });
     } catch (error) {
-      res.status(500).json({message : 'Fetching data failed.'});
-      client.close();
+      res.status(500).json({message : 'Fetching comments failed.'});
     }   
   }
+
+  client.close();
 
 }
 

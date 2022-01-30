@@ -1,4 +1,4 @@
-import { connectDatabase, fetchDocuments, insertDocuments } from '../../../helpers/db-util';
+import { connectDatabase, getAllDocuments, insertDocuments } from '../../../helpers/db-util';
 
 async function handler(req, res) {
   const eventId = req.query.eventId;
@@ -49,7 +49,8 @@ async function handler(req, res) {
 
   if (req.method === "GET") {
     try {
-      let documents = await fetchDocuments(client, 'comments');
+      let sortData = { _id : 1 };
+      let documents = await getAllDocuments(client, 'comments', sortData);
       res.status(200).json({ comments : documents });
     } catch (error) {
       res.status(500).json({message : 'Fetching data failed.'});

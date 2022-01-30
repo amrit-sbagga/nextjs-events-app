@@ -15,9 +15,9 @@ export async function insertDocuments(client, collectionName, data){
     return result;
 }
 
-export async function fetchDocuments(client, collectionName){
+export async function getAllDocuments(client, collectionName, sortData){
     const db = client.db();
     const collection = db.collection(collectionName);
-    let documents = await collection.find().sort({ _id : -1 }).toArray();
+    let documents = await collection.find().sort(sortData).toArray();
     return documents;
 }

@@ -1,11 +1,15 @@
-import { MongoClient } from 'mongodb';
+import { connectDatabase, fetchDocuments, insertDocuments } from '../../../helpers/db-util';
 
 async function handler(req, res) {
   const eventId = req.query.eventId;
 
-  const DB_URL = process.env.NEXT_PUBLIC_MONGO_DB_URL;
-  //console.log("DB_URL = ", DB_URL);
-  const client = await MongoClient.connect(DB_URL)
+  let client;
+  try {
+      client = await connectDatabase();
+  } catch (error) {
+      res.status(500).json({message : 'Connecting to database failed.'});
+      return;
+  }
 
   if (req.method === "POST") {
     const { email, name, text } = req.body;
@@ -31,23 +35,28 @@ async function handler(req, res) {
     }
     console.log(newComment);
 
-    const db = client.db();
-    const collection = db.collection('comments');
-    let result = await collection.insertOne({comment : newComment});
-    newComment.id = result.insertedId;
-
-    res.status(201).json({message : 'Added comment.', comment : newComment})
+    try {
+      let data = {text : text, name : name, email : email};
+      let result = await insertDocuments(client, 'comments', data);
+      newComment._id = result.insertedId;
+      res.status(201).json({message : 'Added comment.', comment : newComment})
+    } catch (error) {
+      res.status(500).json({message : 'Inserting data failed.'});
+      client.close();
+    }
+    
   }
 
   if (req.method === "GET") {
-      const dummyList = [
-        { id : 'c1', name : 'Amrit', text : 'Hello' },
-        { id : 'c2', name : 'Honey', text : 'hi' }  
-      ]
-      res.status(200).json({ comments : dummyList });
+    try {
+      let documents = await fetchDocuments(client, 'comments');
+      res.status(200).json({ comments : documents });
+    } catch (error) {
+      res.status(500).json({message : 'Fetching data failed.'});
+      client.close();
+    }   
   }
 
-  client.close();
 }
 
 export default handler;
